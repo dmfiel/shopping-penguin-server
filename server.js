@@ -6,8 +6,8 @@ const dbConfig = require('./app/config/db.config');
 // Initiallize Express / CORS connection
 const app = express();
 
-var corsOptions = {
-  origin: 'http://localhost:8081'
+const corsOptions = {
+  origin: 'http://localhost:5173'
 };
 
 app.use(cors(corsOptions));
@@ -22,9 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Shopping Penguin.' });
 });
+
 // routes
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
+require('./app/routes/list.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

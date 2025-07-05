@@ -1,10 +1,9 @@
 const config = require('../config/auth.config');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const db = require('../models');
 const User = db.user;
 const Role = db.role;
-
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
 
 async function signup(req, res) {
   try {
@@ -41,7 +40,7 @@ async function signin(req, res) {
     });
     if (!user) {
       console.log(`User (${req.body.username}) not found.`);
-      return res.status(404).send({ message: 'User Not found.' });
+      return res.status(404).send({ message: 'User not found.' });
     }
     await user.populate('roles', '-__v');
 
