@@ -5,7 +5,9 @@ const User = db.user;
 const Role = db.role;
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers['x-access-token'];
+  // console.log('request headers: ', req.headers);
+  let token = req.headers['x-access-token'];
+  if (!token) token = req.headers['authorization'];
 
   if (!token) {
     console.log('Unauthorized, no token provided.');
