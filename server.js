@@ -6,10 +6,10 @@ const dbConfig = require('./app/config/db.config');
 // Initiallize Express / CORS connection
 const app = express();
 
+// use cors to specify where the front-end server can be located
 const corsOptions = {
   origin: 'http://localhost:5173'
 };
-
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
