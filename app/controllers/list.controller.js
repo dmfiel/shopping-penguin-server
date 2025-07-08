@@ -4,9 +4,9 @@ const { authJwt } = require('../middlewares');
 const Lists = db.lists;
 
 async function postLists(req, res) {
-  console.log('req headers: ', req.headers);
+  // console.log('req headers: ', req.headers);
   try {
-    console.log('post body: ', req.body);
+    // console.log('post body: ', req.body);
     const user = req.userId;
     const listJSON = JSON.stringify(req.body);
     let record = await Lists.findOne({
@@ -14,10 +14,10 @@ async function postLists(req, res) {
     });
 
     if (record) {
-      console.log(`Found Lists for user (${req.userId}), updating.`);
-      console.log(record.lists);
+      // console.log(`Found Lists for user (${req.userId}), updating.`);
+      // console.log(record.lists);
       record.lists = listJSON;
-      console.log(record.lists);
+      // console.log(record.lists);
     } else {
       console.log(
         `Lists for user (${req.userId}) not found to update, creating one.`
@@ -28,11 +28,11 @@ async function postLists(req, res) {
       });
     }
 
-    console.log(record);
+    // console.log(record);
     await record.save();
 
-    res.send({ message: 'Lists saved successfully!' });
-    console.log(`Lists for (${user}) saved successfully!`);
+    res.send({ message: 'Lists saved successfully' });
+    console.log(`Lists for (${user}) saved.`);
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: err });
@@ -49,12 +49,12 @@ async function getLists(req, res) {
       console.log(`Lists for user (${req.userId}) not found.`);
       return res.status(404).send({ message: 'Lists not found.' });
     }
-    console.log(record.lists);
+    // console.log(record.lists);
     res.status(200).send({
       id: req.userId,
       lists: JSON.parse(record.lists)
     });
-    console.log(`Lists sent for (${req.userId}).`);
+    console.log(`Lists for (${req.userId}) sent.`);
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: err });

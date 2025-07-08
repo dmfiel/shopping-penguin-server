@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
   //  console.log('request headers: ', req.headers);
   let token = req.headers['x-access-token'];
   if (!token) token = req.headers['authorization'];
-  console.log('token: ', token);
+  // console.log('token: ', token);
 
   if (!token) {
     console.log('Unauthorized, no token provided.');
@@ -25,7 +25,7 @@ const verifyToken = (req, res, next) => {
       });
     }
     req.userId = decoded.id;
-    console.log('decoded id: ', decoded.id);
+    // console.log('decoded id: ', decoded.id);
     next();
   });
 };
