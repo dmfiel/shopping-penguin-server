@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./app/models');
-const dbConfig = require('./app/config/db.config');
+const dbConfig = require('/db.config');
 
 // Initiallize Express / CORS connection
 const app = express();
