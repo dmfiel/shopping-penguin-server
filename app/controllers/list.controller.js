@@ -1,17 +1,38 @@
 const db = require('../models');
+const { authJwt } = require('../middlewares');
+
 const Lists = db.lists;
 
 async function postLists(req, res) {
+  console.log('req headers: ', req.headers);
   try {
-    const lists = new Lists({
-      userid: req.userId,
-      lists: JSON.stringify(req.body.lists)
+    console.log('post body: ', req.body);
+    const user = req.userId;
+    const listJSON = JSON.stringify(req.body);
+    let record = await Lists.findOne({
+      userid: req.userId
     });
 
-    await lists.save();
+    if (record) {
+      console.log(`Found Lists for user (${req.userId}), updating.`);
+      console.log(record.lists);
+      record.lists = listJSON;
+      console.log(record.lists);
+    } else {
+      console.log(
+        `Lists for user (${req.userId}) not found to update, creating one.`
+      );
+      record = new Lists({
+        userid: user,
+        lists: listJSON
+      });
+    }
+
+    console.log(record);
+    await record.save();
 
     res.send({ message: 'Lists saved successfully!' });
-    console.log(`Lists for (${req.usedid}) saved successfully!`);
+    console.log(`Lists for (${user}) saved successfully!`);
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: err });

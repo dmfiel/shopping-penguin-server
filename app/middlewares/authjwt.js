@@ -5,9 +5,10 @@ const User = db.user;
 const Role = db.role;
 
 const verifyToken = (req, res, next) => {
-  // console.log('request headers: ', req.headers);
+  //  console.log('request headers: ', req.headers);
   let token = req.headers['x-access-token'];
   if (!token) token = req.headers['authorization'];
+  console.log('token: ', token);
 
   if (!token) {
     console.log('Unauthorized, no token provided.');
@@ -18,12 +19,13 @@ const verifyToken = (req, res, next) => {
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      console.log('Unauthorized, please signin for a new token.');
+      console.log('Access expired, please signin for a new token.');
       return res.status(401).send({
-        message: 'Unauthorized, please signin for a new token.'
+        message: 'Access expired, please signin for a new token.'
       });
     }
     req.userId = decoded.id;
+    console.log('decoded id: ', decoded.id);
     next();
   });
 };
