@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const db = require('./index');
 
-const Lists = mongoose.model(
+const Lists = db.connection.model(
   'Lists',
   new mongoose.Schema({
     userid: String,

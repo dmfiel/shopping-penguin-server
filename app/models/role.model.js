@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const db = require('./index');
 
-const Role = mongoose.model(
+const Role = db.connection.model(
   'Role',
   new mongoose.Schema({
     name: String

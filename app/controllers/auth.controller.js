@@ -1,11 +1,11 @@
-const config = require('/auth.config');
+const config = require('../../auth.config.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('../models');
-const User = db.user;
-const Role = db.role;
 
 async function signup(req, res) {
+  const User = db.user;
+  const Role = db.role;
   try {
     const user = new User({
       username: req.body.username,
@@ -34,6 +34,8 @@ async function signup(req, res) {
 }
 
 async function signin(req, res) {
+  const User = db.user;
+  const Role = db.role;
   try {
     const user = await User.findOne({
       username: req.body.username

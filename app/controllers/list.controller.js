@@ -1,9 +1,8 @@
 const db = require('../models');
 const { authJwt } = require('../middlewares');
 
-const Lists = db.lists;
-
 async function postLists(req, res) {
+  const Lists = db.lists;
   // console.log('req headers: ', req.headers);
   try {
     // console.log('post body: ', req.body);
@@ -40,6 +39,7 @@ async function postLists(req, res) {
 }
 
 async function getLists(req, res) {
+  const Lists = db.lists;
   try {
     const record = await Lists.findOne({
       userid: req.userId

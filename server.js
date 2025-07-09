@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./app/models');
-const dbConfig = require('/db.config');
+const dbConfig = require('./db.config');
 
 // Initiallize Express / CORS connection
 const app = express();
@@ -35,15 +35,23 @@ app.listen(PORT, () => {
 });
 
 // Initialize MongoDB connection
-const Role = db.role;
 mongoConnect();
 
-async function mongoConnect() {
+// async
+function mongoConnect() {
   try {
-    await db.mongoose.connect(
-      `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
-    );
+    // let dbConnection = await db.mongoose.connect(dbConfig.URI);
+    db.connection = db.mongoose.createConnection(dbConfig.URI);
     console.log('Successfully connected to MongoDB.');
+
+    // mongoose.connection.useDB(dbConfig.DB);
+    db.connection = db.connection.useDb(dbConfig.DB);
+    console.log(`Successfully connected to database (${dbConfig.DB}).`);
+
+    // console.log(db.connection);
+    db.setupModels();
+    console.log('DB models setup');
+
     initializeRoles();
   } catch (err) {
     console.error('Connection error', err);
@@ -52,6 +60,7 @@ async function mongoConnect() {
 }
 
 async function initializeRoles() {
+  const Role = db.role;
   try {
     const count = await Role.estimatedDocumentCount();
     if (count === 0) {

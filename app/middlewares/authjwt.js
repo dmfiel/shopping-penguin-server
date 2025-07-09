@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/auth.config.js');
+const config = require('../../auth.config.js');
 const db = require('../models/index.js');
-const User = db.user;
-const Role = db.role;
 
 const verifyToken = (req, res, next) => {
   //  console.log('request headers: ', req.headers);
@@ -31,6 +29,8 @@ const verifyToken = (req, res, next) => {
 };
 
 async function isRole(req, res, next, roleNeeded) {
+  const User = db.user;
+  const Role = db.role;
   try {
     const user = await User.findById(req.userId);
     const roles = await Role.find({ _id: { $in: user.roles } });
