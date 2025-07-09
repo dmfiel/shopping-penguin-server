@@ -1,16 +1,44 @@
 const config = require('../../auth.config.js');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const db = require('../models');
+const crypto = require('crypto');
+
+async function hasher(password) {
+  return new Promise((resolve, reject) => {
+    const salt = crypto.randomBytes(32).toString('hex');
+
+    crypto.scrypt(password, salt, 64, (err, derivedKey) => {
+      if (err) reject(err);
+      resolve(salt + ':' + derivedKey.toString('hex'));
+    });
+  });
+}
+
+async function verify(password, hash) {
+  return new Promise((resolve, reject) => {
+    const [salt, key] = hash.split(':');
+    const keyBuffer = Buffer.from(key, 'hex');
+    crypto.scrypt(password, salt, 64, (err, derivedKey) => {
+      if (err) reject(err);
+      resolve(
+        crypto.timingSafeEqual(
+          keyBuffer,
+          Buffer.from(derivedKey.toString('hex'), 'hex')
+        )
+      );
+    });
+  });
+}
 
 async function signup(req, res) {
   const User = db.user;
   const Role = db.role;
   try {
+    const hash = await hasher(req.body.password);
     const user = new User({
       username: req.body.username,
       email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8)
+      password: hash
     });
 
     await user.save();
@@ -45,10 +73,7 @@ async function signin(req, res) {
     }
     await user.populate('roles', '-__v');
 
-    const passwordIsValid = bcrypt.compareSync(
-      req.body.password,
-      user.password
-    );
+    const passwordIsValid = await verify(req.body.password, user.password);
 
     if (!passwordIsValid) {
       console.log(`Invalid password for user (${req.body.username}).`);
