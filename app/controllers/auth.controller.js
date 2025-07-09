@@ -35,7 +35,6 @@ async function signup(req, res) {
 
 async function signin(req, res) {
   const User = db.user;
-  const Role = db.role;
   try {
     const user = await User.findOne({
       username: req.body.username

@@ -5,17 +5,16 @@ const db = {};
 
 db.mongoose = mongoose;
 db.connection = {};
-
-db.lists = {};
-db.user = {};
-db.role = {};
-
 db.ROLES = ['user', 'admin', 'moderator'];
 
+db.role = {};
+db.user = {};
+db.lists = {};
+
 db.setupModels = () => {
-  db.lists = require('./list.model');
-  db.user = require('./user.model');
   db.role = require('./role.model');
+  db.user = require('./user.model');
+  db.lists = require('./list.model');
 };
 
 module.exports = db;

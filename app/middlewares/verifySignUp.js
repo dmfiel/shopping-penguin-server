@@ -1,7 +1,6 @@
 const db = require('../models/index');
 
 async function checkDuplicateUsernameOrEmail(req, res, next) {
-  const ROLES = db.ROLES;
   const User = db.user;
   try {
     // Username
@@ -37,7 +36,6 @@ async function checkDuplicateUsernameOrEmail(req, res, next) {
 
 const checkRolesExisted = (req, res, next) => {
   const ROLES = db.ROLES;
-  const User = db.user;
   if (req.body.roles) {
     for (const role of req.body.roles) {
       if (!ROLES.includes(role)) {
