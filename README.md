@@ -1,4 +1,4 @@
-# Shopping Penguin Client
+# Shopping Penguin Server
 
 This application delivers an elegant, friendly system for shopping lists. Items are grouped by store (grocery, hardware, etc.) and category (produce, lumber, etc.) so that users can easily see the items they need to buy when they are in that section of the store. Items and categories can be added and changed through the intuitive interface. Lists are stored both locally on the user's browser and in a MongoDB database with encrypted user authentication for security and portability.
 
