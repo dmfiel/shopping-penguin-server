@@ -64,4 +64,3 @@ David Fiel
 ## Acknowledgments
 
 - Thanks to Per Scholas!
-- Thanks to Danail Gabenski for the IPv4 regex (https://stackoverflow.com/questions/5284147/validating-ipv4-addresses-with-regexp/68104187#68104187)
