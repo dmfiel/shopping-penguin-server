@@ -7,8 +7,19 @@ const dbConfig = require('./db.config');
 const app = express();
 
 // use cors to specify where the front-end server can be located
+const allowedOrigins = [
+  'https://fiel.us',
+  'http://fiel.us',
+  'http://localhost:5173'
+];
 const corsOptions = {
-  origin: ['https://fiel.us', 'http://fiel.us', 'http://localhost:5173']
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origin site (${origin}) not allowed by CORS`));
+    }
+  }
 };
 app.use(cors(corsOptions));
 
