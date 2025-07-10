@@ -8,7 +8,7 @@ const app = express();
 
 // use cors to specify where the front-end server can be located
 const corsOptions = {
-  origin: 'https://fiel.us'
+  origin: ['https://fiel.us', 'http://fiel.us', 'http://localhost:5173']
 };
 app.use(cors(corsOptions));
 
