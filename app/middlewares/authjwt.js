@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 const jwt = require('jsonwebtoken');
 const config = require('../../auth.config.js');
 const db = require('../models/index.js');
@@ -5,7 +6,7 @@ const db = require('../models/index.js');
 const verifyToken = (req, res, next) => {
   //  console.log('request headers: ', req.headers);
   let token = req.headers['x-access-token'];
-  if (!token) token = req.headers['authorization'];
+  if (!token) token = req.headers.authorization;
   // console.log('token: ', token);
 
   if (!token) {

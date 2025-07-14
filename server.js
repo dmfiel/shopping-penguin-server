@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 const express = require('express');
 const cors = require('cors');
 const db = require('./app/models');

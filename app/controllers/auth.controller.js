@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 const config = require('../../auth.config.js');
 const jwt = require('jsonwebtoken');
 const db = require('../models');
@@ -61,6 +62,15 @@ async function signup(req, res) {
   }
 }
 
+export function createToken(id) {
+  const token = jwt.sign({ id: id }, config.secret, {
+    algorithm: 'HS256',
+    allowInsecureKeySizes: true,
+    expiresIn: 31 * 24 * 60 * 60 // one month token expiration
+  });
+  return token;
+}
+
 async function signin(req, res) {
   const User = db.user;
   try {
@@ -83,11 +93,7 @@ async function signin(req, res) {
       });
     }
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
-      algorithm: 'HS256',
-      allowInsecureKeySizes: true,
-      expiresIn: 86400 // 24 hours
-    });
+    const token = createToken(user.id);
 
     const authorities = [];
     for (const role of user.roles) {

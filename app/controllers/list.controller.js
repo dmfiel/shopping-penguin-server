@@ -1,5 +1,6 @@
+/* eslint-disable space-before-function-paren */
 const db = require('../models');
-const { authJwt } = require('../middlewares');
+const { createToken } = require('./auth.controller.js');
 
 async function postLists(req, res) {
   const Lists = db.lists;
@@ -49,9 +50,13 @@ async function getLists(req, res) {
       console.log(`Lists for user (${req.userId}) not found.`);
       return res.status(404).send({ message: 'Lists not found.' });
     }
+
+    const token = createToken(req.userId);
+
     // console.log(record.lists);
     res.status(200).send({
       id: req.userId,
+      accessToken: token,
       lists: JSON.parse(record.lists)
     });
     console.log(`Lists for (${req.userId}) sent.`);
