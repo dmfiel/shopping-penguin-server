@@ -62,7 +62,7 @@ async function signup(req, res) {
   }
 }
 
-export function createToken(id) {
+function createToken(id) {
   const token = jwt.sign({ id: id }, config.secret, {
     algorithm: 'HS256',
     allowInsecureKeySizes: true,
@@ -113,4 +113,4 @@ async function signin(req, res) {
   }
 }
 
-module.exports = { signup, signin };
+module.exports = { signup, signin, createToken };
