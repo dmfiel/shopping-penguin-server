@@ -12,12 +12,12 @@ async function postLists(req, res) {
     const options = { new: true, upsert: true };
     const user = req.userId;
     const listJSON = JSON.stringify(req.body);
-    let record = new Lists({
+    const record = new Lists({
       userid: user,
       lists: listJSON
     });
 
-    record = await Lists.findOneAndUpdate(
+    const retRecord = await Lists.findOneAndUpdate(
       {
         userid: req.userId
       },
@@ -25,7 +25,7 @@ async function postLists(req, res) {
       options
     );
 
-    if (!record) {
+    if (!retRecord) {
       console.error('Unable to save lists to db.');
       res.status(500).send({ message: 'Unable to save lists to db.' });
       return;
