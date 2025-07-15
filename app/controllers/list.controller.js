@@ -7,29 +7,29 @@ async function postLists(req, res) {
   // console.log('req headers: ', req.headers);
   try {
     // console.log('post body: ', req.body);
+    // new: returns the modified doc
+    // upsert: creates the doc if it doesn't exist
+    const options = { new: true, upsert: true };
     const user = req.userId;
     const listJSON = JSON.stringify(req.body);
-    let record = await Lists.findOne({
-      userid: req.userId
+    let record = new Lists({
+      userid: user,
+      lists: listJSON
     });
 
-    if (record) {
-      // console.log(`Found Lists for user (${req.userId}), updating.`);
-      // console.log(record.lists);
-      record.lists = listJSON;
-      // console.log(record.lists);
-    } else {
-      console.log(
-        `Lists for user (${req.userId}) not found to update, creating one.`
-      );
-      record = new Lists({
-        userid: user,
-        lists: listJSON
-      });
-    }
+    record = await Lists.findOneAndUpdate(
+      {
+        userid: req.userId
+      },
+      record,
+      options
+    );
 
-    // console.log(record);
-    await record.save();
+    if (!record) {
+      console.error('Unable to save lists to db.');
+      res.status(500).send({ message: 'Unable to save lists to db.' });
+      return;
+    }
 
     res.send({ message: 'Lists saved successfully' });
     console.log(`Lists for (${user}) saved.`);
