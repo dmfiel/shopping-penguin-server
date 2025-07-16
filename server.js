@@ -7,6 +7,11 @@ const dbConfig = require('./db.config');
 // Initiallize Express / CORS connection
 const app = express();
 
+// simple test route
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to the Shopping Penguin.' });
+});
+
 // use cors to specify where the front-end server can be located
 const allowedOrigins = [
   'https://fiel.us',
@@ -15,7 +20,7 @@ const allowedOrigins = [
 ];
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error(`Origin site (${origin}) not allowed by CORS`));
@@ -29,11 +34,6 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-
-// simple route
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to the Shopping Penguin.' });
-});
 
 // routes
 require('./app/routes/auth.routes')(app);
