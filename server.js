@@ -1,6 +1,7 @@
 /* eslint-disable space-before-function-paren */
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const db = require('./app/models');
 const dbConfig = require('./db.config');
 
@@ -28,6 +29,7 @@ const corsOptions = {
   }
 };
 app.use(cors(corsOptions));
+app.use(morgan('dev'));
 
 // parse requests of content-type - application/json
 app.use(express.json());
