@@ -31,7 +31,11 @@ async function postLists(req, res) {
     // console.log(record);
     await record.save();
 
-    res.send({ message: 'Lists saved successfully' });
+    res.send({
+      message: 'Lists saved successfully',
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt
+    });
     console.log(`Lists for (${user}) saved.`);
   } catch (err) {
     console.error(err);
@@ -57,7 +61,9 @@ async function getLists(req, res) {
     res.status(200).send({
       id: req.userId,
       accessToken: token,
-      lists: JSON.parse(record.lists)
+      lists: JSON.parse(record.lists),
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt
     });
     console.log(`Lists for (${req.userId}) sent.`);
   } catch (err) {
