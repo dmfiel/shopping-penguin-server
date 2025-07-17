@@ -66,4 +66,31 @@ async function getLists(req, res) {
   }
 }
 
-module.exports = { postLists, getLists };
+async function getListsModDate(req, res) {
+  const Lists = db.lists;
+  try {
+    const record = await Lists.findOne(
+      {
+        userid: req.userId
+      },
+      'updatedAt'
+    );
+
+    if (!record) {
+      console.log(`Lists for user (${req.userId}) not found.`);
+      return res.status(404).send({ message: 'Lists not found.' });
+    }
+
+    console.log(record.lists);
+    res.status(200).send({
+      id: req.userId,
+      updatedAt: record.updatedAt
+    });
+    console.log(`Lists modified ${record.updatedAt} for (${req.userId}).`);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err });
+  }
+}
+
+module.exports = { postLists, getLists, getListsModDate };
