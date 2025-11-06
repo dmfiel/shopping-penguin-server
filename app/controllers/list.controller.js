@@ -31,8 +31,11 @@ async function postLists(req, res) {
     // console.log(record);
     await record.save();
 
+    const token = createToken(req.userId);
+
     res.send({
       message: 'Lists saved successfully',
+      accessToken: token,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt
     });

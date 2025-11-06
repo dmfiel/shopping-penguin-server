@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const db = require('./index');
 
-const List = db.connection.model(
-  'List',
+const Category = db.connection.model(
+  'Category',
   new mongoose.Schema(
     {
       userid: String,
-      list: String,
+      category: String,
       id: String,
+      listId: String,
       shown: { type: Boolean, default: true },
       deleted: { type: Boolean, default: false },
       created: Date,
@@ -17,4 +18,4 @@ const List = db.connection.model(
   )
 );
 
-module.exports = List;
+module.exports = Category;
