@@ -13,4 +13,5 @@ module.exports = function (app) {
   app.get('/api/lists', [authJwt.verifyToken], controller.getLists);
   app.get('/api/listsmod', [authJwt.verifyToken], controller.getListsModDate);
   app.post('/api/lists', [authJwt.verifyToken], controller.postLists);
+  app.get('/api/');
 };

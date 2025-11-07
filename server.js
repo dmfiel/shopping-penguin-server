@@ -1,5 +1,6 @@
 /* eslint-disable space-before-function-paren */
 const express = require('express');
+const apicache = require('apicache');
 const cors = require('cors');
 const morgan = require('morgan');
 const db = require('./app/models');
@@ -7,6 +8,8 @@ const dbConfig = require('./db.config');
 
 // Initiallize Express / CORS connection
 const app = express();
+const cache = apicache.middleware;
+app.use(cache('5 minutes'));
 
 // simple test route
 app.get('/', (req, res) => {
@@ -21,6 +24,7 @@ const allowedOrigins = [
 ];
 const corsOptions = {
   origin: function (origin, callback) {
+    // TODO - remove !orgin after Postman testing is finished
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
