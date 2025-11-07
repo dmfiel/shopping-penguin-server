@@ -133,12 +133,16 @@ async function saveLists(listsOld, userId) {
   const List = db.list;
   try {
     for (const listOld of listsOld) {
-      if (listOld && listOld.list) {
+      if (listOld && listOld.list && !listOld.deleted) {
         const listNew = new List(listOld);
         listNew.userid = userId;
+        listNew.createdAt = listNew.created;
+        listNew.updatedAt = listNew.modified;
+
         const result = await listNew.save();
         const listId = result._id;
         console.log(`List ${listNew.list} converted to _id ${listId}.`);
+
         saveCategories(listOld.categories, userId, listId);
       }
     }
@@ -151,15 +155,19 @@ async function saveCategories(categoriesOld, userId, listId) {
   const Category = db.category;
   try {
     for (const categoryOld of categoriesOld) {
-      if (categoryOld && categoryOld.category) {
+      if (categoryOld && categoryOld.category && !categoriesOld.deleted) {
         const categoryNew = new Category(categoryOld);
         categoryNew.userid = userId;
         categoryNew.listId = listId;
+        categoryNew.createdAt = categoryNew.created;
+        categoryNew.updatedAt = categoryNew.modified;
+
         const result = await categoryNew.save();
         const categoryId = result._id;
         console.log(
           `Category ${categoryNew.category} converted to _id ${categoryId}.`
         );
+
         saveItems(categoryOld.items, userId, listId, categoryId);
       }
     }
@@ -172,11 +180,14 @@ async function saveItems(itemsOld, userId, listId, categoryId) {
   const Item = db.item;
   try {
     for (const itemOld of itemsOld) {
-      if (itemOld && itemOld.item) {
+      if (itemOld && itemOld.item && !itemOld.deleted) {
         const itemNew = new Item(itemOld);
         itemNew.userid = userId;
         itemNew.listId = listId;
         itemNew.categoryId = categoryId;
+        itemNew.createdAt = itemNew.created;
+        itemNew.updatedAt = itemNew.modified;
+
         const result = await itemNew.save();
         const itemId = result._id;
         console.log(`Item ${itemNew.item} converted to _id ${itemId}.`);
