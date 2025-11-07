@@ -1,6 +1,5 @@
 /* eslint-disable space-before-function-paren */
 const express = require('express');
-const apicache = require('apicache');
 const cors = require('cors');
 const morgan = require('morgan');
 const db = require('./app/models');
@@ -8,8 +7,6 @@ const dbConfig = require('./db.config');
 
 // Initiallize Express / CORS connection
 const app = express();
-const cache = apicache.middleware;
-app.use(cache('5 minutes'));
 
 // simple test route
 app.get('/', (req, res) => {
@@ -45,6 +42,7 @@ app.use(express.urlencoded({ extended: true }));
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/list.routes')(app);
+require('./app/routes/lists.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

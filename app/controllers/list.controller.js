@@ -49,19 +49,14 @@ async function getLists(req, res) {
       userid: req.userId
     });
 
-    if (!records) {
+    if (!records || !records.length) {
       console.log(`Lists for user (${req.userId}) not found.`);
       return res.status(404).send({ message: 'Lists not found.' });
     }
 
-    const token = createToken(req.userId);
+    console.log(records);
+    res.status(200).json(records);
 
-    // console.log(records);
-    res.json(records);
-    res.status(200).send({
-      id: req.userId,
-      accessToken: token
-    });
     console.log(`Lists (${records.length}) for (${req.userId}) sent.`);
   } catch (err) {
     console.log(err);

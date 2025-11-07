@@ -102,4 +102,28 @@ async function getListsModDate(req, res) {
   }
 }
 
-module.exports = { postLists, getLists, getListsModDate };
+async function convertLists(req, res) {
+  const Lists = db.lists;
+  try {
+    const record = await Lists.findOne({
+      userid: req.userId
+    });
+
+    if (!record) {
+      console.log(`Lists for user (${req.userId}) not found.`);
+      return res.status(404).send({ message: 'Lists not found.' });
+    }
+
+    // console.log(record.lists);
+    res.status(200).send({
+      id: req.userId,
+      lists: JSON.parse(record.lists)
+    });
+    console.log(`Lists for (${req.userId}) converted.`);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err });
+  }
+}
+
+module.exports = { postLists, getLists, getListsModDate, convertLists };
