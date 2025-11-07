@@ -9,16 +9,16 @@ async function postList(req, res) {
     // console.log('post body: ', req.body);
     const user = req.userId;
     let record = null;
-    if (req.body.id) {
+    if (req.body._id) {
       record = await List.findOne({
-        $and: [{ userid: user }, { id: req.body.id }]
+        $and: [{ userid: user }, { _id: req.body._id }]
       });
     }
-    if (req.body.id && record) {
-      console.log(`Found List (${req.body.id}), updating.`);
+    if (req.body._id && record) {
+      console.log(`Found List (${req.body._id}), updating.`);
       record = Object.assign(record, req.body);
     } else {
-      console.log(`List (${req.body.id}) not found to update, creating one.`);
+      console.log(`List (${req.body._id}) not found to update, creating one.`);
       record = new List(req.body);
     }
 
@@ -54,7 +54,7 @@ async function getLists(req, res) {
       return res.status(404).send({ message: 'Lists not found.' });
     }
 
-    console.log(records);
+    // console.log(records);
     res.status(200).json(records);
 
     console.log(`Lists (${records.length}) for (${req.userId}) sent.`);

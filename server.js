@@ -42,6 +42,8 @@ app.use(express.urlencoded({ extended: true }));
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/list.routes')(app);
+require('./app/routes/category.routes')(app);
+require('./app/routes/item.routes')(app);
 require('./app/routes/lists.routes')(app);
 
 // set port, listen for requests
