@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const db = {};
-
 db.mongoose = mongoose;
 db.connection = {};
 db.ROLES = ['user', 'admin', 'moderator'];
+db.MAX_LEN_NAME = 100;
 
 db.role = {};
 db.user = {};

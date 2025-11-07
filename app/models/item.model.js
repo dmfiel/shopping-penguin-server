@@ -5,11 +5,22 @@ const Item = db.connection.model(
   'Item',
   new mongoose.Schema(
     {
-      userid: String,
-      item: String,
-      id: String,
-      listId: String,
-      categoryId: String,
+      userid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      },
+      item: { type: String, required: true, maxLength: db.MAX_LEN_NAME },
+      listId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ListA',
+        required: true
+      },
+      categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
+      },
       countCompleted: { type: Number, default: 0 },
       lastCompleted: Date,
       firstCompleted: Date,

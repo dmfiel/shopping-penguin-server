@@ -1,45 +1,41 @@
 /* eslint-disable space-before-function-paren */
-const db = require('../models');
+const db = require('../models/index.js');
 const { createToken } = require('./auth.controller.js');
 
-async function postLists(req, res) {
-  const Lists = db.lists;
+async function postList(req, res) {
+  const List = db.list;
   // console.log('req headers: ', req.headers);
   try {
     // console.log('post body: ', req.body);
     const user = req.userId;
-    const listJSON = JSON.stringify(req.body);
-    let record = await Lists.findOne({
-      userid: req.userId
-    });
-
-    if (record) {
-      // console.log(`Found Lists for user (${req.userId}), updating.`);
-      // console.log(record.lists);
-      record.lists = listJSON;
-      // console.log(record.lists);
-    } else {
-      console.log(
-        `Lists for user (${req.userId}) not found to update, creating one.`
-      );
-      record = new Lists({
-        userid: user,
-        lists: listJSON
+    let record = null;
+    if (req.body.id) {
+      record = await List.findOne({
+        $and: [{ userid: user }, { id: req.body.id }]
       });
     }
+    if (req.body.id && record) {
+      console.log(`Found List (${req.body.id}), updating.`);
+      record = Object.assign(record, req.body);
+    } else {
+      console.log(`List (${req.body.id}) not found to update, creating one.`);
+      record = new List(req.body);
+    }
+
+    record.userid = user;
 
     // console.log(record);
     await record.save();
 
-    const token = createToken(req.userId);
+    const token = createToken(user);
 
     res.send({
-      message: 'Lists saved successfully',
+      message: 'List saved successfully',
       accessToken: token,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt
     });
-    console.log(`Lists for (${user}) saved.`);
+    console.log(`List for (${user}) saved.`);
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: err });
@@ -47,59 +43,85 @@ async function postLists(req, res) {
 }
 
 async function getLists(req, res) {
-  const Lists = db.lists;
+  const List = db.list;
   try {
-    const record = await Lists.findOne({
+    const records = await List.find({
       userid: req.userId
     });
 
-    if (!record) {
+    if (!records) {
       console.log(`Lists for user (${req.userId}) not found.`);
       return res.status(404).send({ message: 'Lists not found.' });
     }
 
     const token = createToken(req.userId);
 
-    // console.log(record.lists);
+    // console.log(records);
+    res.json(records);
     res.status(200).send({
       id: req.userId,
-      accessToken: token,
-      lists: JSON.parse(record.lists),
-      createdAt: record.createdAt,
-      updatedAt: record.updatedAt
+      accessToken: token
     });
-    console.log(`Lists for (${req.userId}) sent.`);
+    console.log(`Lists (${records.length}) for (${req.userId}) sent.`);
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: err });
   }
 }
 
-async function getListsModDate(req, res) {
-  const Lists = db.lists;
+module.exports = { postList, getLists, getProducts };
+
+// get all products  GET /api/products
+async function getProducts(req, res) {
   try {
-    const record = await Lists.findOne(
-      {
-        userid: req.userId
-      },
-      'updatedAt'
-    );
-
-    if (!record) {
-      console.log(`Lists for user (${req.userId}) not found.`);
-      return res.status(404).send({ message: 'Lists not found.' });
+    const match = {};
+    const sortBy = {};
+    let page = 1;
+    let limit = 10;
+    for (const param in req.query) {
+      const value = req.query[param];
+      if (value) {
+        switch (param.toLowerCase()) {
+          case 'page':
+            page = +value;
+            break;
+          case 'limit':
+            limit = +value;
+            break;
+          case 'sortby':
+            for (const sortField of value.toString().split(',')) {
+              const [field, direction] = sortField.split('_');
+              sortBy[field] = direction === 'asc' ? 1 : -1;
+            }
+            break;
+          case 'minprice':
+            if (!match.price) match.price = {};
+            match.price.$gte = value;
+            break;
+          case 'maxprice':
+            if (!match.price) match.price = {};
+            match.price.$lte = value;
+            break;
+          default:
+            // match[param] = value;
+            match[param] = { $eq: value };
+        }
+      }
     }
+    console.log('Query: ', match);
+    console.log('Sort: ', sortBy);
+    const products = await db.product
+      .find(match)
+      .sort(sortBy)
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-    console.log(record.lists);
-    res.status(200).send({
-      id: req.userId,
-      updatedAt: record.updatedAt
-    });
-    console.log(`Lists modified ${record.updatedAt} for (${req.userId}).`);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({ message: err });
+    if (products) {
+      res.json(products);
+      console.log(`Query returned (${products.length}) products.`);
+    } else res.status(500).json({ message: 'Unable to show products.' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.error(error);
   }
 }
-
-module.exports = { postLists, getLists, getListsModDate };

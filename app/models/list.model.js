@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 const db = require('./index');
 
-const List = db.connection.model(
-  'List',
+const ListA = db.connection.model(
+  'ListA',
   new mongoose.Schema(
     {
-      userid: String,
-      list: String,
-      id: String,
+      userid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      },
+      list: { type: String, required: true, maxLength: db.MAX_LEN_NAME },
       shown: { type: Boolean, default: true },
       deleted: { type: Boolean, default: false },
       created: Date,
@@ -17,4 +20,4 @@ const List = db.connection.model(
   )
 );
 
-module.exports = List;
+module.exports = ListA;

@@ -4,7 +4,7 @@ const config = require('../../auth.config.js');
 const db = require('../models/index.js');
 
 const verifyToken = (req, res, next) => {
-  //  console.log('request headers: ', req.headers);
+  // console.log('request headers: ', req.headers);
   let token = req.headers['x-access-token'];
   if (!token) token = req.headers.authorization;
   // console.log('token: ', token);
