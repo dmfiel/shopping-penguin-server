@@ -12,9 +12,7 @@ const ListA = db.connection.model(
       },
       list: { type: String, required: true, maxLength: db.MAX_LEN_NAME },
       shown: { type: Boolean, default: true },
-      deleted: { type: Boolean, default: false },
-      created: Date,
-      modified: Date
+      deleted: { type: Boolean, default: false }
     },
     { timestamps: true }
   )

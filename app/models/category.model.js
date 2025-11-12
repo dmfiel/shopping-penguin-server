@@ -17,9 +17,7 @@ const Category = db.connection.model(
         required: true
       },
       shown: { type: Boolean, default: true },
-      deleted: { type: Boolean, default: false },
-      created: Date,
-      modified: Date
+      deleted: { type: Boolean, default: false }
     },
     { timestamps: true }
   )

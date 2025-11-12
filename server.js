@@ -29,6 +29,7 @@ const corsOptions = {
     }
   }
 };
+app.use(express.json({ limit: '200kb', extended: true }));
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
 

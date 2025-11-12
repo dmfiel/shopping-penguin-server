@@ -25,9 +25,7 @@ const Item = db.connection.model(
       lastCompleted: Date,
       firstCompleted: Date,
       completed: { type: Boolean, default: false },
-      deleted: { type: Boolean, default: false },
-      created: Date,
-      modified: Date
+      deleted: { type: Boolean, default: false }
     },
     { timestamps: true }
   )
