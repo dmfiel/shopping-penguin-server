@@ -34,6 +34,7 @@ async function postCategory(req, res) {
     res.send({
       message: 'Category saved successfully',
       accessToken: token,
+      _id: record._id,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt
     });

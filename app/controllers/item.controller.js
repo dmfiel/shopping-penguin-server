@@ -32,6 +32,7 @@ async function postItem(req, res) {
     res.send({
       message: 'Item saved successfully',
       accessToken: token,
+      _id: record._id,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt
     });
