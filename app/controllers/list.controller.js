@@ -32,6 +32,7 @@ async function postList(req, res) {
     res.send({
       message: 'List saved successfully',
       accessToken: token,
+      _id: record._id,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt
     });
